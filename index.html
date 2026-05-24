@@ -333,13 +333,13 @@
             cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all .2s; width: 100%;
         }
         .btn-add-modal:hover { transform: translateY(-2px); box-shadow: 0 10px 28px var(--accent-glow); }
-        .btn-wa {
-            background: #25d366; color: #fff; border: none; border-radius: 14px;
+        .btn-capture {
+            background: #6366f1; color: #fff; border: none; border-radius: 14px;
             padding: 14px 24px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 15px;
             cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
             transition: all .2s; width: 100%; margin-top: 10px;
         }
-        .btn-wa:hover { background: #1fba58; transform: translateY(-2px); box-shadow: 0 10px 28px rgba(37,211,102,.3); }
+        .btn-capture:hover { background: #4f46e5; transform: translateY(-2px); box-shadow: 0 10px 28px rgba(99,102,241,.35); }
 
         /* ── CART SIDEBAR ── */
         #cart-sidebar {
@@ -439,6 +439,7 @@
         ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--text3); }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -487,8 +488,8 @@
             <span class="ct-val" id="cartTotal">$0.00</span>
         </div>
         <button class="btn-checkout" id="checkoutBtn">
-            <span class="material-symbols-rounded">chat</span>
-            Cotizar por WhatsApp
+            <span class="material-symbols-rounded">photo_camera</span>
+            Capturar Pedido
         </button>
     </div>
 </div>
@@ -518,9 +519,9 @@
                 <span class="material-symbols-rounded">add_shopping_cart</span>
                 Agregar a mi lista
             </button>
-            <button class="btn-wa" id="modalWhatsapp">
-                <span class="material-symbols-rounded">chat</span>
-                Consultar disponibilidad
+            <button class="btn-capture" id="modalCapture">
+                <span class="material-symbols-rounded">photo_camera</span>
+                Capturar Pedido
             </button>
         </div>
     </div>
@@ -761,9 +762,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('cartBtn').addEventListener('click', openCart);
     document.getElementById('closeCart').addEventListener('click', closeCart);
     document.getElementById('cart-overlay').addEventListener('click', closeCart);
-    document.getElementById('checkoutBtn').addEventListener('click', checkoutWhatsApp);
+    document.getElementById('checkoutBtn').addEventListener('click', captureCart);
     document.getElementById('modalAddCart').addEventListener('click', () => { if (modalProduct) addToCart(modalProduct); });
-    document.getElementById('modalWhatsapp').addEventListener('click', () => { if (modalProduct) whatsappProduct(modalProduct); });
+    document.getElementById('modalCapture').addEventListener('click', () => { if (modalProduct) captureModal(); });
 });
 
 function renderHeroStats() {
@@ -979,9 +980,36 @@ function closeModal() {
     modalProduct = null;
 }
 
-function whatsappProduct(p) {
-    const msg = encodeURIComponent(`¡Hola Point Sell! Me interesa:\n\n*${p.nombre}*\nCategoría: ${p.categoria}\n${p.precio > 0 ? 'Precio: ' + fmtPrice(p.precio) + ' MXN' : 'Precio a consultar'}\n\n¿Tienen disponibilidad?`);
-    window.open(`https://wa.me/?text=${msg}`, '_blank');
+function captureModal() {
+    const box = document.querySelector('.modal-box');
+    if (!box || !window.html2canvas) { showToast('Usa Print Screen para capturar'); return; }
+    showToast('📸 Generando captura...');
+    html2canvas(box, { backgroundColor: '#0d1017', scale: 2, useCORS: true, allowTaint: true }).then(canvas => {
+        const name = modalProduct ? modalProduct.nombre.substring(0,24).replace(/\s+/g,'-') : 'pedido';
+        downloadCanvas(canvas, `pedido-${name}.png`);
+    });
+}
+
+function captureCart() {
+    if (!cart.length) return;
+    if (!window.html2canvas) { showToast('Usa Print Screen para capturar'); return; }
+    showToast('📸 Generando captura...');
+    const sidebar = document.getElementById('cart-sidebar');
+    html2canvas(sidebar, { backgroundColor: '#0d1017', scale: 2, useCORS: true, allowTaint: true }).then(canvas => {
+        downloadCanvas(canvas, 'lista-pedido.png');
+    });
+}
+
+function downloadCanvas(canvas, filename) {
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    showToast('✅ Captura guardada');
+}
+
+function fallbackCapture(el, filename) {
+    showToast('Toma captura con Print Screen o Cmd+Shift+4');
 }
 
 function addToCart(p) {
@@ -1057,14 +1085,6 @@ function closeCart() {
     document.getElementById('cart-sidebar').classList.remove('open');
     document.getElementById('cart-overlay').classList.remove('open');
     document.body.style.overflow = '';
-}
-
-function checkoutWhatsApp() {
-    if (!cart.length) return;
-    const lines = cart.map(c => `• ${c.nombre} × ${c.qty}${c.precio > 0 ? ' = ' + fmtPrice(c.precio * c.qty) : ' (precio a consultar)'}`).join('\n');
-    const total = cart.reduce((s, c) => s + c.precio * c.qty, 0);
-    const msg = encodeURIComponent(`¡Hola Point Sell! Quisiera cotizar:\n\n${lines}\n\n💰 Total estimado: ${fmtPrice(total)} MXN\n\n¿Confirman disponibilidad?`);
-    window.open(`https://wa.me/?text=${msg}`, '_blank');
 }
 
 function toggleMusic() {
