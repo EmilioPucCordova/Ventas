@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Point Sell | Catálogo Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: {
+                        dark: { 900: '#05080f', 800: '#0a0f1c', 700: '#111827' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #05080f;
+            background-image: radial-gradient(ellipse at top, #111827, #05080f);
+            background-attachment: fixed;
+        }
+        .glass-card {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-nav {
+            background: rgba(5, 8, 15, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        /* Hide scrollbar for category tabs but keep functionality */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="text-gray-200 min-h-screen flex flex-col">
+
+    <nav class="glass-nav sticky top-0 z-40 w-full px-4 md:px-8 py-4 flex items-center justify-between shadow-2xl shadow-black/50">
+        <div class="flex items-center gap-3">
+            <div class="bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-2.5 rounded-xl shadow-lg shadow-purple-500/30">
+                <span class="material-symbols-rounded text-white block">diamond</span>
+            </div>
+            <div>
+                <span class="font-bold text-xl md:text-2xl tracking-tight bg-gradient-to-r from-white via-gray-100 to-gray-400 bg-clip-text text-transparent">Point Sell</span>
+                <span class="text-[9px] md:text-[10px] block font-bold text-indigo-400 tracking-[0.2em] uppercase">Catálogo Premium</span>
+            </div>
+        </div>
+
+        <div class="relative hidden md:block w-80">
+            <span class="material-symbols-rounded absolute left-3 top-2.5 text-gray-400 text-xl">search</span>
+            <input type="text" id="searchInput" placeholder="Buscar por nombre o SKU..." class="w-full bg-dark-800/80 border border-gray-700/50 rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all placeholder-gray-500">
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-[1400px] w-full mx-auto px-4 md:px-8 py-8 flex flex-col">
+        
+        <div class="relative block md:hidden mb-6 w-full">
+            <span class="material-symbols-rounded absolute left-3 top-2.5 text-gray-400 text-xl">search</span>
+            <input type="text" id="mobileSearchInput" placeholder="Buscar productos..." class="w-full bg-dark-800/80 border border-gray-700/50 rounded-xl pl-10 pr-4 py-3 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder-gray-500">
+        </div>
+
+        <div class="mb-8 text-center md:text-left">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-2">Descubre Novedades</h1>
+            <p class="text-gray-400 text-sm md:text-base">Artículos exclusivos seleccionados para ti.</p>
+        </div>
+
+        <div class="relative mb-8">
+            <div class="flex overflow-x-auto hide-scrollbar gap-3 pb-2 snap-x" id="categoryTabs">
+                </div>
+            <div class="absolute top-0 right-0 bottom-2 w-12 bg-gradient-to-l from-[#05080f] to-transparent pointer-events-none md:hidden"></div>
+        </div>
+
+        <div id="skeletonContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
+            <div class="glass-card rounded-2xl h-[420px] animate-pulse p-4 flex flex-col">
+                <div class="bg-gray-800/80 w-full h-56 rounded-xl"></div>
+                <div class="space-y-3 mt-5 flex-1">
+                    <div class="h-3 bg-gray-800/80 rounded w-1/3"></div>
+                    <div class="h-5 bg-gray-800/80 rounded w-3/4"></div>
+                    <div class="h-8 bg-gray-800/80 rounded w-1/2 mt-4"></div>
+                </div>
+            </div>
+            <div class="glass-card rounded-2xl h-[420px] animate-pulse p-4 flex flex-col">
+                <div class="bg-gray-800/80 w-full h-56 rounded-xl"></div>
+                <div class="space-y-3 mt-5 flex-1">
+                    <div class="h-3 bg-gray-800/80 rounded w-1/3"></div>
+                    <div class="h-5 bg-gray-800/80 rounded w-3/4"></div>
+                    <div class="h-8 bg-gray-800/80 rounded w-1/2 mt-4"></div>
+                </div>
+            </div>
+            <div class="glass-card rounded-2xl h-[420px] animate-pulse p-4 hidden md:flex flex-col">
+                <div class="bg-gray-800/80 w-full h-56 rounded-xl"></div>
+                <div class="space-y-3 mt-5 flex-1">
+                    <div class="h-3 bg-gray-800/80 rounded w-1/3"></div>
+                    <div class="h-5 bg-gray-800/80 rounded w-3/4"></div>
+                    <div class="h-8 bg-gray-800/80 rounded w-1/2 mt-4"></div>
+                </div>
+            </div>
+            <div class="glass-card rounded-2xl h-[420px] animate-pulse p-4 hidden lg:flex flex-col">
+                <div class="bg-gray-800/80 w-full h-56 rounded-xl"></div>
+                <div class="space-y-3 mt-5 flex-1">
+                    <div class="h-3 bg-gray-800/80 rounded w-1/3"></div>
+                    <div class="h-5 bg-gray-800/80 rounded w-3/4"></div>
+                    <div class="h-8 bg-gray-800/80 rounded w-1/2 mt-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 hidden min-h-[400px] content-start">
+            </div>
+
+        <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
+            <span class="material-symbols-rounded text-6xl text-gray-700 mb-4">search_off</span>
+            <h3 class="text-xl font-bold text-gray-300">No se encontraron productos</h3>
+            <p class="text-gray-500 mt-2">Intenta buscar con otros términos o cambia de categoría.</p>
+        </div>
+
+        <div id="paginationControls" class="mt-12 flex items-center justify-center gap-2 hidden">
+            </div>
+    </main>
+
+    <div id="productModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/90 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
+        <div class="glass-card rounded-3xl max-w-4xl w-full overflow-hidden transform scale-95 transition-transform duration-300 relative flex flex-col md:flex-row shadow-2xl shadow-indigo-500/10 border border-gray-700/50">
+            
+            <button id="closeModal" class="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/80 text-gray-300 hover:text-white p-2 rounded-full backdrop-blur transition-all focus:outline-none border border-gray-600/30">
+                <span class="material-symbols-rounded block">close</span>
+            </button>
+            
+            <div class="w-full md:w-1/2 bg-white/5 flex items-center justify-center p-8 relative group">
+                <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 opacity-50"></div>
+                <img id="modalImage" src="" alt="" class="w-full h-64 md:h-96 object-contain relative z-10 drop-shadow-2xl transition-transform duration-500 group-hover:scale-105">
+            </div>
+
+            <div class="w-full md:w-1/2 p-6 md:p-10 flex flex-col justify-between bg-dark-900/90">
+                <div>
+                    <span id="modalCategory" class="inline-block px-3 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-lg text-xs font-bold uppercase tracking-wider mb-4">Categoría</span>
+                    <h2 id="modalTitle" class="text-2xl md:text-3xl font-extrabold text-white mb-6 leading-tight">Nombre del Producto</h2>
+                    
+                    <div class="bg-dark-800/50 rounded-2xl p-5 border border-gray-800/50 mb-6">
+                        <p class="text-xs text-gray-400 mb-1 font-medium uppercase tracking-wide">Precio Especial</p>
+                        <div id="modalPrice" class="text-4xl font-black text-emerald-400 bg-clip-text">
+                            $0.00 <span class="text-base text-gray-500 font-semibold align-top">MXN</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-3 mt-4">
+                    <div class="flex items-center gap-3 text-sm text-gray-300 mb-4 px-2">
+                        <span class="material-symbols-rounded text-emerald-500">verified</span>
+                        <span>Disponible para envío seguro</span>
+                    </div>
+                    <button id="modalWhatsAppBtn" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 text-[15px]">
+                        <span class="material-symbols-rounded">chat</span> Me interesa este producto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Tu configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDoIJ3d4BLmmNCpchkLYp8U7Nxvf1lQwZ4",
+            authDomain: "tesad112.firebaseapp.com",
+            projectId: "tesad112",
+            storageBucket: "tesad112.firebasestorage.app",
+            messagingSenderId: "769133839873",
+            appId: "1:769133839873:web:728fb99f345d65e50ba200",
+            measurementId: "G-08N8BBNLB2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Variables de Estado
+        let allProducts = [];
+        let filteredProducts = [];
+        let currentCategory = 'ALL';
+        let searchQuery = '';
+        let currentPage = 1;
+        const ITEMS_PER_PAGE = 12;
+
+        async function initCatalog() {
+            try {
+                // Intento de lectura a Firestore
+                const querySnapshot = await getDocs(collection(db, "productos"));
+                if (querySnapshot.empty) {
+                    loadFallbackData();
+                } else {
+                    const tempArr = [];
+                    querySnapshot.forEach((doc) => { tempArr.push({ id: doc.id, ...doc.data() }); });
+                    processProducts(tempArr);
+                }
+            } catch (error) {
+                console.warn("Cargando datos de respaldo debido a base vacía o sin conexión.");
+                loadFallbackData(); 
+            }
+        }
+
+        function loadFallbackData() {
+            // Datos iniciales de Buytiti extraídos del JSON
+            const raw = [
+                { nombre: "Mini Plumas Multicolor Hamburguesas y Papas (36 pzs)", categoria: "ESCRITURA", precio: 283, img: "https://buytiti.com/wp-content/uploads/2025/04/B-2028YZHAMB-1.jpg" },
+                { nombre: "Mini Plumas Multicolor Huella de Gatos (36 pzs)", categoria: "ESCRITURA", precio: 283, img: "https://buytiti.com/wp-content/uploads/2025/04/B-2028YZGAT-1.jpg" },
+                { nombre: "Mini Plumas Multicolor Astronauta (36 pzs)", categoria: "ESCRITURA", precio: 283, img: "https://buytiti.com/wp-content/uploads/2025/04/B-2028YZAST-1.jpg" },
+                { nombre: "Paquete de 36 Bolígrafos Punto Fino Tinta Negra", categoria: "ESCRITURA", precio: 514, img: "https://buytiti.com/wp-content/uploads/2024/12/B-10058YG.jpg" },
+                { nombre: "Bolígrafos de Huellita Kawaii con 36 piezas", categoria: "ESCRITURA", precio: 514, img: "https://buytiti.com/wp-content/uploads/2024/11/Boligrafos-de-Huellita-Kawaii-con-36-piezas-B-10060YG.jpg" },
+                { nombre: "Paquete de 36 Plumas Figura Giratoria Tinta Azul", categoria: "ESCRITURA", precio: 437, img: "https://buytiti.com/wp-content/uploads/2024/10/Paquete-de-36-Plumas-con-Figura-Giratoria-Tinta-Azul-B-2029YZALI-1.jpg" },
+                { nombre: "Plumas con Marcatextos Forma de Cohete Luz LED", categoria: "ESCRITURA", precio: 543, img: "https://buytiti.com/wp-content/uploads/2024/10/Innovador-Paquete-de-20-Plumas-con-Marcatextos-en-Forma-de-Cohete-Luz-LED-B-10100YG-1.jpg" },
+                { nombre: "Marcatextos de Conejo con Sello (36 piezas)", categoria: "MARCADORES", precio: 206, img: "https://buytiti.com/wp-content/uploads/2024/11/Marcatextos-de-Conejo-con-Sello-de-36-piezas-B-10132YG.jpg" },
+                { nombre: "Marcadores Color Pastel Forma Zanahoria (6 pzs)", categoria: "MARCADORES", precio: 17, img: "https://buytiti.com/wp-content/uploads/2024/03/Kit-de-6-Marcadores-Color-Pastel-en-Forma-de-Zanahoria-B-10013YG.jpg" },
+                { nombre: "Marcatextos Paletas de Hielo y Astronautas (24 pzs)", categoria: "MARCADORES", precio: 137, img: "https://buytiti.com/wp-content/uploads/2025/01/B-10090YG-PAQUETE-24PZS-1.jpg" },
+                { nombre: "Kits Escolares de 5 Piezas (Paquete 12 pzs)", categoria: "PAPELERÍA", precio: 189, img: "https://buytiti.com/wp-content/uploads/2025/02/TK-158TZ-PAQUETE-12PZS-1.jpg" },
+                { nombre: "Kits de Papelería Diseño Labubu (Paquete 12 pzs)", categoria: "PAPELERÍA", precio: 249, img: "https://buytiti.com/wp-content/uploads/2025/01/TK-129TZ.png" },
+                { nombre: "Calculadora Científica Avanzada", categoria: "OFICINA", precio: 34, img: "https://buytiti.com/wp-content/uploads/2026/05/JS-1081-PORTADA.png" },
+                { nombre: "Calculadora Básica Kawaii 12 Dígitos", categoria: "OFICINA", precio: 47, img: "https://buytiti.com/wp-content/uploads/2025/01/JS-9647-1.jpg" },
+                { nombre: "Calculadora Retro Transparente Degradado", categoria: "OFICINA", precio: 50, img: "https://buytiti.com/wp-content/uploads/2024/10/Calculadora-Basica-Retro-Transparente-de-10-Digitos-Degradado-JS-9637.jpg" },
+                { nombre: "Lámpara Táctil con Diseño de Estrella", categoria: "HOGAR", precio: 86, img: "https://buytiti.com/wp-content/uploads/2026/05/LED-737-PORTADA.jpg" },
+                { nombre: "Lámpara Táctil con Diseño de Perrito", categoria: "HOGAR", precio: 86, img: "https://buytiti.com/wp-content/uploads/2026/05/LED-735-PORTADA.jpg" },
+                { nombre: "Bocina Bluetooth 8″ RGB y Micrófono", categoria: "ELECTRÓNICA", precio: 316, img: "https://buytiti.com/wp-content/uploads/2026/05/GTS-2555-PORTADA.jpg" },
+                { nombre: "Bocina Bluetooth TWS y Luz RGB", categoria: "ELECTRÓNICA", precio: 99, img: "https://buytiti.com/wp-content/uploads/2026/05/CH-J2155-PORTADA-1.jpg" },
+                { nombre: "Audífonos Bluetooth Pantalla Inteligente", categoria: "ELECTRÓNICA", precio: 164, img: "https://buytiti.com/wp-content/uploads/2026/04/ST-P028-PORTADA.jpg" },
+                { nombre: "Cubo Cargador Turbo 20W Tipo C", categoria: "CELULARES", precio: 33, img: "https://buytiti.com/wp-content/uploads/2026/04/CAR-PD73-PORTADA.png" },
+                { nombre: "Soporte para Tableta Metálico", categoria: "CELULARES", precio: 71, img: "https://buytiti.com/wp-content/uploads/2026/04/SOP-1077_portada.jpg" },
+                { nombre: "Reloj de Mano Digital Deportivo", categoria: "ACCESORIOS", precio: 67, img: "https://buytiti.com/wp-content/uploads/2026/05/ZB-622-PORTADA-1.jpg" },
+                { nombre: "Rasuradora Eléctrica Multifunción", categoria: "CUIDADO PERSONAL", precio: 103, img: "https://buytiti.com/wp-content/uploads/2026/03/MR-150P-PORTADA.jpg" },
+                { nombre: "Limpiador Facial Masajeador", categoria: "CUIDADO PERSONAL", precio: 121, img: "https://buytiti.com/wp-content/uploads/2026/02/MR-933-PORTADA.jpg" }
+            ];
+
+            processProducts(raw);
+        }
+
+        function processProducts(data) {
+            allProducts = data.map((p, idx) => {
+                const basePrice = p.precioCosto || p.precio || p.Precio_Actual || 0;
+                // Margen estricto de $150 al precio base
+                const finalPrice = Math.ceil(basePrice + 150);
+                
+                return {
+                    id: p.id || `prod_${idx}`,
+                    nombre: p.nombre || p.Nombre_Producto,
+                    categoria: (p.categoria || p.Categoria_Producto || 'GENERAL').toUpperCase(),
+                    precio: finalPrice,
+                    img: p.img || p.Imagen_Producto
+                };
+            });
+
+            // Ocultar skeleton
+            document.getElementById('skeletonContainer').classList.add('hidden');
+            document.getElementById('productsGrid').classList.remove('hidden');
+
+            renderTabs();
+            applyFilters();
+        }
+
+        // Renderizado del Paginado y Pestañas
+        function renderTabs() {
+            const tabsContainer = document.getElementById('categoryTabs');
+            tabsContainer.innerHTML = '';
+            
+            const categories = ['ALL', ...new Set(allProducts.map(p => p.categoria))];
+
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                const isSelected = currentCategory === cat;
+                
+                btn.className = `snap-start px-5 py-2.5 rounded-full text-xs md:text-sm font-bold whitespace-nowrap transition-all duration-300 border ${
+                    isSelected 
+                    ? 'bg-indigo-500 border-indigo-400 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]' 
+                    : 'bg-dark-800/80 border-gray-700/50 text-gray-400 hover:text-white hover:bg-gray-800 hover:border-gray-600'
+                }`;
+                btn.textContent = cat === 'ALL' ? 'Todos los Productos' : cat;
+                
+                btn.onclick = () => {
+                    currentCategory = cat;
+                    currentPage = 1;
+                    renderTabs(); // Actualiza estilos visuales
+                    applyFilters();
+                    
+                    // Center the clicked tab slightly
+                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                };
+                tabsContainer.appendChild(btn);
+            });
+        }
+
+        function applyFilters() {
+            filteredProducts = allProducts.filter(p => {
+                const matchSearch = p.nombre.toLowerCase().includes(searchQuery);
+                const matchCat = currentCategory === 'ALL' || p.categoria === currentCategory;
+                return matchSearch && matchCat;
+            });
+            currentPage = 1;
+            renderGrid();
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('productsGrid');
+            const emptyState = document.getElementById('emptyState');
+            const pagControls = document.getElementById('paginationControls');
+            
+            grid.innerHTML = '';
+
+            if (filteredProducts.length === 0) {
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                pagControls.classList.add('hidden');
+                return;
+            }
+
+            grid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            pagControls.classList.remove('hidden');
+
+            const start = (currentPage - 1) * ITEMS_PER_PAGE;
+            const end = start + ITEMS_PER_PAGE;
+            const currentItems = filteredProducts.slice(start, end);
+
+            currentItems.forEach(product => {
+                const card = document.createElement('div');
+                card.className = "glass-card rounded-2xl overflow-hidden flex flex-col group cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_8px_30px_rgba(99,102,241,0.15)] border-gray-700/40 hover:border-indigo-500/40";
+                
+                card.innerHTML = `
+                    <div class="relative bg-white/5 h-56 p-6 flex items-center justify-center overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+                        <img src="${product.img}" alt="${product.nombre}" loading="lazy" class="w-full h-full object-contain relative z-0 transition-transform duration-500 group-hover:scale-110 drop-shadow-lg">
+                        <button class="absolute bottom-4 right-4 z-20 bg-indigo-500 hover:bg-indigo-400 text-white p-2.5 rounded-xl opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all shadow-lg shadow-indigo-500/30">
+                            <span class="material-symbols-rounded text-[20px] block">visibility</span>
+                        </button>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col justify-between bg-gradient-to-b from-transparent to-black/20">
+                        <div>
+                            <span class="text-[9px] font-black text-indigo-400 uppercase tracking-widest block mb-1.5">${product.categoria}</span>
+                            <h3 class="text-sm font-semibold text-gray-200 line-clamp-2 leading-relaxed group-hover:text-white transition-colors">${product.nombre}</h3>
+                        </div>
+                        <div class="mt-4 flex items-end justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500 font-medium mb-0.5">Precio</p>
+                                <div class="flex items-baseline gap-1">
+                                    <span class="text-lg font-extrabold text-emerald-400">$${parseFloat(product.precio).toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                card.onclick = () => openModal(product);
+                grid.appendChild(card);
+            });
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const container = document.getElementById('paginationControls');
+            const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+            container.innerHTML = '';
+
+            if (totalPages <= 1) {
+                container.classList.add('hidden');
+                return;
+            }
+
+            // Prev Button
+            const btnPrev = document.createElement('button');
+            btnPrev.innerHTML = '<span class="material-symbols-rounded text-sm block">chevron_left</span>';
+            btnPrev.className = `p-2 rounded-xl border border-gray-700/50 transition-all ${currentPage === 1 ? 'opacity-50 cursor-not-allowed bg-dark-800' : 'hover:bg-gray-800 hover:text-white bg-dark-800/80 text-gray-400 cursor-pointer'}`;
+            btnPrev.disabled = currentPage === 1;
+            btnPrev.onclick = () => { currentPage--; renderGrid(); window.scrollTo({top: 0, behavior: 'smooth'}); };
+            container.appendChild(btnPrev);
+
+            // Page Numbers
+            for (let i = 1; i <= totalPages; i++) {
+                const btnPage = document.createElement('button');
+                btnPage.textContent = i;
+                const isCurrent = currentPage === i;
+                btnPage.className = `w-10 h-10 flex items-center justify-center rounded-xl text-sm font-bold transition-all ${
+                    isCurrent 
+                    ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30' 
+                    : 'bg-dark-800/80 border border-gray-700/50 text-gray-400 hover:bg-gray-800 hover:text-white'
+                }`;
+                btnPage.onclick = () => { currentPage = i; renderGrid(); window.scrollTo({top: 0, behavior: 'smooth'}); };
+                container.appendChild(btnPage);
+            }
+
+            // Next Button
+            const btnNext = document.createElement('button');
+            btnNext.innerHTML = '<span class="material-symbols-rounded text-sm block">chevron_right</span>';
+            btnNext.className = `p-2 rounded-xl border border-gray-700/50 transition-all ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed bg-dark-800' : 'hover:bg-gray-800 hover:text-white bg-dark-800/80 text-gray-400 cursor-pointer'}`;
+            btnNext.disabled = currentPage === totalPages;
+            btnNext.onclick = () => { currentPage++; renderGrid(); window.scrollTo({top: 0, behavior: 'smooth'}); };
+            container.appendChild(btnNext);
+        }
+
+        // Eventos del Modal
+        function openModal(product) {
+            const modal = document.getElementById("productModal");
+            const modalContent = modal.querySelector(".glass-card");
+            
+            document.getElementById("modalImage").src = product.img;
+            document.getElementById("modalTitle").textContent = product.nombre;
+            document.getElementById("modalCategory").textContent = product.categoria;
+            document.getElementById("modalPrice").innerHTML = `$${parseFloat(product.precio).toFixed(2)} <span class="text-base text-gray-500 font-semibold align-top">MXN</span>`;
+            
+            document.getElementById("modalWhatsAppBtn").onclick = () => {
+                const msg = encodeURIComponent(`¡Hola Point Sell! Me interesa consultar la disponibilidad de este producto del catálogo:\n\n*${product.nombre}*\nCategoría: ${product.categoria}\nPrecio lista: $${product.precio} MXN`);
+                window.open(`https://wa.me/?text=${msg}`, '_blank');
+            };
+
+            modal.classList.remove("opacity-0", "pointer-events-none");
+            modalContent.classList.remove("scale-95");
+            modalContent.classList.add("scale-100");
+        }
+
+        document.getElementById("closeModal").addEventListener("click", () => {
+            document.getElementById("productModal").classList.add("opacity-0", "pointer-events-none");
+            document.querySelector("#productModal .glass-card").classList.replace("scale-100", "scale-95");
+        });
+
+        // Eventos de Búsqueda
+        const handleSearch = (e) => {
+            searchQuery = e.target.value.toLowerCase();
+            // Sincronizar ambos inputs
+            document.getElementById("searchInput").value = e.target.value;
+            document.getElementById("mobileSearchInput").value = e.target.value;
+            applyFilters();
+        };
+
+        document.getElementById("searchInput").addEventListener("input", handleSearch);
+        document.getElementById("mobileSearchInput").addEventListener("input", handleSearch);
+
+        // Iniciar
+        initCatalog();
+    </script>
+</body>
+</html>
